@@ -204,7 +204,8 @@ nav.scrolled{background:color-mix(in srgb, var(--bg) 78%, transparent);backdrop-
 .hero-name .line:nth-child(2) span{transition-delay:.1s;}
 .hero-name em{font-style:normal;background:linear-gradient(100deg,var(--accent),var(--accent3));-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% auto;animation:gradientShift 6s ease-in-out infinite;}
 @keyframes gradientShift{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
-.hero-sub{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;margin-top:44px;flex-wrap:wrap;}
+.hero-sub{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;margin-top:44px;flex-wrap:wrap;opacity:0;transform:translateY(20px);animation:fadeUp .9s var(--ease) 1.3s forwards;}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
 .hero-role{font-size:clamp(14px,1.6vw,19px);font-weight:300;letter-spacing:0.03em;color:var(--fg-dim);max-width:480px;}
 .hero-role b{color:var(--fg);font-weight:500;}
 .hero-scroll{display:flex;flex-direction:column;align-items:center;gap:10px;}
@@ -385,7 +386,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:34px
       <span class="line"><span>Vishal</span></span>
       <span class="line"><span><em>Khatawate</em></span></span>
     </h1>
-    <div class="hero-sub reveal">
+    <div class="hero-sub">
       <p class="hero-role">3+ years delivering enterprise <b>AI agents</b>, LLM applications, and voice-automation systems in production — turning complex integrations into <b>measurable business impact</b>.</p>
       <div class="hero-scroll"><span>Scroll</span><div class="l"></div></div>
     </div>
@@ -782,39 +783,76 @@ const countObs = new IntersectionObserver((entries) => {
 }, { threshold: 0.4 });
 document.querySelectorAll('.stat-val').forEach(c => countObs.observe(c));
 
-/* ───────── Lenis smooth scroll + GSAP ScrollTrigger ───────── */
-gsap.registerPlugin(ScrollTrigger);
-let lenis = null;
-if (!reducedMotion) {
-  lenis = new Lenis({ duration: 1.05, easing: t => Math.min(1, 1.001 - Math.pow(2, -10*t)) });
-  lenis.on('scroll', ScrollTrigger.update);
-  gsap.ticker.add((time) => lenis.raf(time*1000));
-  gsap.ticker.lagSmoothing(0);
+/* ───────── safety net: content must NEVER get stuck invisible ─────────
+   Every .reveal element starts at opacity:0 and is meant to be faded in
+   by GSAP ScrollTrigger below. If GSAP/ScrollTrigger/Lenis fail to load,
+   throw, or mis-fire (e.g. late web-font swap shifting layout after
+   trigger positions were calculated), this guarantees content still
+   appears — first via a hard fallback if the libraries are missing at
+   all, then via a delayed force-show for anything still hidden. */
+function forceShowReveals(){
+  document.querySelectorAll('.reveal').forEach(el => {
+    el.style.opacity = '1';
+    el.style.transform = 'none';
+  });
 }
 
-/* scroll reveal */
-gsap.utils.toArray('.reveal').forEach(el => {
-  gsap.fromTo(el, { opacity:0, y:34 }, {
-    opacity:1, y:0, duration: reducedMotion ? 0.01 : 1, ease:'power3.out',
-    scrollTrigger:{ trigger: el, start:'top 88%' }
-  });
-});
+let gsapReady = (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined');
 
-/* horizontal drag-style project gallery (desktop only) */
-const mm = gsap.matchMedia();
-mm.add('(min-width: 901px)', () => {
-  const projTrack = document.getElementById('projTrack');
-  const getAmount = () => projTrack.scrollWidth - document.documentElement.clientWidth;
-  const tween = gsap.to(projTrack, {
-    x: () => -getAmount(),
-    ease: 'none',
-    scrollTrigger: {
-      trigger: '#work', start: 'top top', end: () => '+=' + getAmount(),
-      scrub: 1, pin: true, invalidateOnRefresh: true, anticipatePin: 1
+if (!gsapReady) {
+  forceShowReveals();
+} else {
+  try {
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* Lenis smooth scroll */
+    if (!reducedMotion && typeof Lenis !== 'undefined') {
+      const lenis = new Lenis({ duration: 1.05, easing: t => Math.min(1, 1.001 - Math.pow(2, -10*t)) });
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time*1000));
+      gsap.ticker.lagSmoothing(0);
     }
-  });
-  return () => { tween.scrollTrigger && tween.scrollTrigger.kill(); tween.kill(); };
-});
+
+    /* scroll reveal */
+    gsap.utils.toArray('.reveal').forEach(el => {
+      gsap.fromTo(el, { opacity:0, y:34 }, {
+        opacity:1, y:0, duration: reducedMotion ? 0.01 : 1, ease:'power3.out',
+        scrollTrigger:{ trigger: el, start:'top 92%' }
+      });
+    });
+
+    /* horizontal drag-style project gallery (desktop only) */
+    const mm = gsap.matchMedia();
+    mm.add('(min-width: 901px)', () => {
+      const projTrack = document.getElementById('projTrack');
+      const getAmount = () => Math.max(0, projTrack.scrollWidth - document.documentElement.clientWidth);
+      const tween = gsap.to(projTrack, {
+        x: () => -getAmount(),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#work', start: 'top top', end: () => '+=' + getAmount(),
+          scrub: 1, pin: true, invalidateOnRefresh: true, anticipatePin: 1
+        }
+      });
+      return () => { tween.scrollTrigger && tween.scrollTrigger.kill(); tween.kill(); };
+    });
+
+    /* web fonts swap late and shift layout — stale trigger positions
+       must be recalculated or elements below the fold can silently
+       never cross their trigger point */
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => ScrollTrigger.refresh());
+    }
+    window.addEventListener('load', () => ScrollTrigger.refresh());
+    setTimeout(() => ScrollTrigger.refresh(), 800);
+  } catch (err) {
+    forceShowReveals();
+  }
+}
+
+/* absolute last resort: nothing should still be invisible a few
+   seconds after load, no matter what went wrong above */
+setTimeout(forceShowReveals, 3000);
 </script>
 </body>
 </html>
