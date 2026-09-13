@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vishal Khatawate — AI/ML Engineer & Technical Program Manager</title>
-<meta name="description" content="Vishal Khatawate — AI/ML Engineer & Technical Program Manager building agentic LLM systems, RAG pipelines, and production-grade AI infrastructure. Based in Bengaluru, India.">
+<title>Vishal Khatawate — Forward Deployed AI/ML Engineer</title>
+<meta name="description" content="Vishal Khatawate — Forward Deployed AI/ML Engineer delivering enterprise AI agents, LLM applications, RAG, and voice-agent automation. 12× CRM throughput, 80%+ voice-agent containment, 35% lower LLM inference costs. Based in Bengaluru, India.">
 <meta name="theme-color" content="#07080a">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Vishal Khatawate — AI/ML Engineer & Technical Program Manager">
-<meta property="og:description" content="Building agentic LLM systems, RAG pipelines, and production-grade AI infrastructure.">
+<meta property="og:title" content="Vishal Khatawate — Forward Deployed AI/ML Engineer">
+<meta property="og:description" content="Delivering enterprise AI agents, LLM applications, RAG, and voice-agent automation at production scale.">
 <meta property="og:url" content="https://vishalkhatawate.github.io/">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%2307080a'/%3E%3Ctext x='50' y='68' font-size='50' font-family='Arial,sans-serif' font-weight='700' fill='%235b7cff' text-anchor='middle'%3EVK%3C/text%3E%3C/svg%3E">
@@ -31,13 +31,14 @@
   --muted:#767c88;
   --accent:#5b7cff;
   --accent2:#9b6bff;
+  --accent3:#38e0d8;
   --lime:#d3ff5c;
   --display: 'Clash Display', 'Inter', sans-serif;
   --sans: 'Inter', system-ui, -apple-system, sans-serif;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-html{scroll-behavior:smooth;}
+html{scroll-behavior:auto;}
 body{
   background:var(--bg);
   color:var(--fg);
@@ -61,9 +62,23 @@ a{color:inherit;}
 /* ───────── noise overlay ───────── */
 #noise{
   position:fixed;inset:0;z-index:9000;pointer-events:none;
-  opacity:0.035;mix-blend-mode:overlay;
+  opacity:0.045;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 0.5s steps(2) infinite;
 }
+@keyframes grain{0%{transform:translate(0,0);}50%{transform:translate(-1%,1%);}100%{transform:translate(1%,-1%);}}
+
+/* ───────── static fallback bg (reduced motion / no webgl) ───────── */
+#bg-fallback{
+  position:fixed;inset:0;z-index:0;pointer-events:none;display:none;
+  background:
+    radial-gradient(60% 50% at 20% 15%, rgba(91,124,255,0.28), transparent 60%),
+    radial-gradient(55% 45% at 85% 25%, rgba(155,107,255,0.24), transparent 60%),
+    radial-gradient(50% 50% at 50% 90%, rgba(56,224,216,0.16), transparent 60%),
+    var(--bg);
+}
+.no-webgl #bg-fallback{display:block;}
+.no-webgl #bg-canvas{display:none;}
 
 /* ───────── preloader ───────── */
 #preloader{
@@ -75,20 +90,23 @@ a{color:inherit;}
 .pre-mark{font-family:var(--display);font-size:15px;letter-spacing:0.3em;color:var(--fg-dim);text-transform:uppercase;}
 .pre-count{font-family:var(--display);font-size:clamp(40px,8vw,64px);font-weight:600;color:var(--fg);font-variant-numeric:tabular-nums;}
 .pre-bar{width:220px;height:1px;background:var(--line);position:relative;overflow:hidden;}
-.pre-bar span{position:absolute;inset:0;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .2s linear;}
+.pre-bar span{position:absolute;inset:0;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3));transition:width .2s linear;}
 
 /* ───────── custom cursor ───────── */
 @media (hover:hover) and (pointer:fine){
   #cursor-dot,#cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:9500;border-radius:50%;transform:translate(-50%,-50%);}
   #cursor-dot{width:6px;height:6px;background:var(--fg);}
-  #cursor-ring{width:34px;height:34px;border:1px solid rgba(243,244,241,0.35);transition:width .25s var(--ease),height .25s var(--ease),border-color .25s var(--ease),background .25s var(--ease);}
+  #cursor-ring{width:34px;height:34px;border:1px solid rgba(243,244,241,0.35);display:flex;align-items:center;justify-content:center;transition:width .25s var(--ease),height .25s var(--ease),border-color .25s var(--ease),background .25s var(--ease);}
   #cursor-ring.grow{width:64px;height:64px;border-color:var(--accent);background:rgba(91,124,255,0.08);}
+  #cursor-ring.view{width:86px;height:86px;border-color:var(--lime);background:rgba(211,255,92,0.08);}
+  #cursor-ring .label{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--lime);opacity:0;transition:opacity .2s;white-space:nowrap;}
+  #cursor-ring.view .label{opacity:1;}
   body{cursor:none;}
-  a,button,.dot,.hamburger{cursor:none;}
+  a,button,.hamburger{cursor:none;}
 }
 
 /* ───────── bg canvas ───────── */
-#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.55;}
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 
 /* ───────── nav ───────── */
 nav{
@@ -102,13 +120,13 @@ nav.scrolled{background:rgba(7,8,10,0.78);backdrop-filter:blur(16px);-webkit-bac
 .nav-logo{font-family:var(--display);font-size:20px;font-weight:600;letter-spacing:0.01em;text-decoration:none;}
 .nav-logo span{color:var(--accent);}
 .nav-links{display:flex;gap:38px;align-items:center;}
-.nav-links a{font-size:13px;letter-spacing:0.06em;text-transform:uppercase;color:var(--fg-dim);text-decoration:none;position:relative;padding:4px 0;transition:color .25s;}
+.nav-links a{font-size:13px;letter-spacing:0.06em;text-transform:uppercase;color:var(--fg-dim);text-decoration:none;position:relative;padding:4px 0;transition:color .25s;display:inline-block;min-width:1ch;}
 .nav-links a::after{content:'';position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--accent);transition:width .3s var(--ease);}
 .nav-links a:hover{color:var(--fg);}
 .nav-links a:hover::after,.nav-links a.active::after{width:100%;}
 .nav-links a.active{color:var(--fg);}
-.nav-cta{font-size:12px;letter-spacing:0.08em;color:var(--bg) !important;background:var(--fg);padding:11px 22px;border-radius:100px;text-transform:uppercase;transition:background .25s,color .25s,transform .25s;}
-.nav-cta:hover{background:var(--accent);color:#fff !important;transform:translateY(-2px);}
+.nav-cta{font-size:12px;letter-spacing:0.08em;color:var(--bg) !important;background:var(--fg);padding:11px 22px;border-radius:100px;text-transform:uppercase;transition:background .25s,color .25s;}
+.nav-cta:hover{background:var(--accent);color:#fff !important;}
 .nav-cta::after{display:none;}
 .hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;z-index:410;}
 .hamburger span{width:24px;height:1.5px;background:var(--fg);transition:transform .3s var(--ease),opacity .3s;}
@@ -122,10 +140,8 @@ nav.scrolled{background:rgba(7,8,10,0.78);backdrop-filter:blur(16px);-webkit-bac
   .hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
 }
 
-/* ───────── reveal utility ───────── */
-.reveal{opacity:0;transform:translateY(34px);transition:opacity .9s var(--ease),transform .9s var(--ease);}
-.reveal.in{opacity:1;transform:translateY(0);}
-.reveal-d1{transition-delay:.08s;} .reveal-d2{transition-delay:.16s;} .reveal-d3{transition-delay:.24s;} .reveal-d4{transition-delay:.32s;}
+/* ───────── reveal utility (driven by GSAP) ───────── */
+.reveal{opacity:0;transform:translateY(34px);will-change:transform,opacity;}
 
 /* ───────── hero ───────── */
 #hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:1;padding-top:120px;padding-bottom:60px;}
@@ -134,10 +150,11 @@ nav.scrolled{background:rgba(7,8,10,0.78);backdrop-filter:blur(16px);-webkit-bac
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(211,255,92,0.55);}70%{box-shadow:0 0 0 10px rgba(211,255,92,0);}100%{box-shadow:0 0 0 0 rgba(211,255,92,0);}}
 .hero-name{font-family:var(--display);font-weight:600;font-size:clamp(52px,10vw,150px);line-height:0.92;letter-spacing:-0.02em;}
 .hero-name .line{overflow:hidden;display:block;}
-.hero-name .line span{display:inline-block;transform:translateY(110%);transition:transform 1s var(--ease);}
+.hero-name .line span{display:inline-block;transform:translateY(110%);transition:transform 1.1s var(--ease);}
 .hero-name.in .line span{transform:translateY(0);}
-.hero-name .line:nth-child(2) span{transition-delay:.08s;}
-.hero-name em{font-style:normal;background:linear-gradient(100deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.hero-name .line:nth-child(2) span{transition-delay:.1s;}
+.hero-name em{font-style:normal;background:linear-gradient(100deg,var(--accent),var(--accent3));-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% auto;animation:gradientShift 6s ease-in-out infinite;}
+@keyframes gradientShift{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
 .hero-sub{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;margin-top:44px;flex-wrap:wrap;}
 .hero-role{font-size:clamp(14px,1.6vw,19px);font-weight:300;letter-spacing:0.03em;color:var(--fg-dim);max-width:480px;}
 .hero-role b{color:var(--fg);font-weight:500;}
@@ -147,7 +164,7 @@ nav.scrolled{background:rgba(7,8,10,0.78);backdrop-filter:blur(16px);-webkit-bac
 .hero-scroll span{font-size:10px;letter-spacing:0.2em;color:var(--muted);text-transform:uppercase;}
 
 /* ───────── marquee ───────── */
-.marquee-strip{position:relative;z-index:1;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:26px 0;background:var(--bg-soft);transform:rotate(-1deg);margin:8px 0 -1px;overflow:hidden;}
+.marquee-strip{position:relative;z-index:1;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:26px 0;background:rgba(11,13,17,0.5);backdrop-filter:blur(6px);transform:rotate(-1deg);margin:8px 0 -1px;overflow:hidden;}
 .marquee-track{display:flex;width:max-content;animation:marquee 32s linear infinite;}
 .marquee-strip:hover .marquee-track{animation-play-state:paused;}
 @keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
@@ -167,11 +184,10 @@ section{position:relative;z-index:1;padding:150px 0;}
 .about-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:90px;align-items:start;}
 @media(max-width:900px){.about-grid{grid-template-columns:1fr;gap:52px;}}
 .about-body{font-size:17px;line-height:1.85;color:var(--fg-dim);font-weight:300;max-width:520px;margin-top:26px;}
-.about-body+.about-body{margin-top:14px;}
 .about-stack{margin-top:30px;font-size:13px;letter-spacing:0.04em;color:var(--muted);display:flex;flex-wrap:wrap;gap:10px;}
 .about-stack code{border:1px solid var(--line);padding:6px 12px;border-radius:100px;font-family:var(--sans);}
-.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);}
-.stat-cell{background:var(--bg);padding:32px 28px;transition:background .3s;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);perspective:900px;}
+.stat-cell{background:rgba(16,19,25,0.55);backdrop-filter:blur(10px);padding:32px 28px;transition:background .3s,transform .1s linear;transform-style:preserve-3d;}
 .stat-cell:hover{background:var(--panel);}
 .stat-val{font-family:var(--display);font-size:44px;font-weight:600;line-height:1;}
 .stat-val span{color:var(--accent);}
@@ -189,14 +205,26 @@ section{position:relative;z-index:1;padding:150px 0;}
 .exp-tags{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;}
 .exp-tag{font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent2);border:1px solid rgba(155,107,255,0.35);padding:5px 13px;border-radius:100px;}
 
-/* ───────── projects ───────── */
-.proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
-@media(max-width:960px){.proj-grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:640px){.proj-grid{grid-template-columns:1fr;}}
-.proj-item{background:var(--bg);padding:0;text-decoration:none;color:inherit;display:flex;flex-direction:column;position:relative;overflow:hidden;transition:background .35s;min-height:290px;}
+/* ───────── projects (horizontal pinned gallery on desktop) ───────── */
+#work{overflow:hidden;}
+.work-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;}
+.work-hint{font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px;}
+.work-hint svg{width:15px;height:15px;animation:swipe 1.6s ease-in-out infinite;}
+@keyframes swipe{0%,100%{transform:translateX(0);opacity:.5;}50%{transform:translateX(6px);opacity:1;}}
+@media(max-width:900px){.work-hint{display:none;}}
+.work-pin{margin-top:56px;}
+.proj-track{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);padding-left:48px;padding-right:48px;}
+@media(max-width:960px){.proj-track{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:640px){.proj-track{grid-template-columns:1fr;padding-left:22px;padding-right:22px;}}
+@media(min-width:901px){
+  .work-pin{overflow:hidden;}
+  .proj-track{display:flex;width:max-content;padding-left:48px;padding-right:12vw;}
+  .proj-item{width:34vw;min-width:400px;max-width:520px;flex-shrink:0;}
+}
+.proj-item{background:rgba(7,8,10,0.6);backdrop-filter:blur(8px);padding:0;text-decoration:none;color:inherit;display:flex;flex-direction:column;position:relative;overflow:hidden;transition:background .35s;min-height:320px;}
 .proj-item:hover{background:var(--panel);}
-.proj-cover{height:120px;position:relative;overflow:hidden;}
-.proj-cover .g{position:absolute;inset:-30%;filter:blur(40px);opacity:.55;transition:transform .6s var(--ease);}
+.proj-cover{height:140px;position:relative;overflow:hidden;}
+.proj-cover .g{position:absolute;inset:-30%;filter:blur(40px);opacity:.6;transition:transform .6s var(--ease);}
 .proj-item:hover .proj-cover .g{transform:scale(1.15) rotate(8deg);}
 .proj-body{padding:26px 26px 30px;display:flex;flex-direction:column;flex:1;}
 .proj-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;}
@@ -204,15 +232,15 @@ section{position:relative;z-index:1;padding:150px 0;}
 .proj-arrow{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;transition:transform .3s var(--ease),border-color .3s,background .3s;flex-shrink:0;}
 .proj-item:hover .proj-arrow{transform:rotate(45deg);border-color:var(--accent);background:rgba(91,124,255,0.1);}
 .proj-arrow svg{width:14px;height:14px;}
-.proj-name{font-family:var(--display);font-size:21px;font-weight:600;margin-bottom:12px;line-height:1.3;}
+.proj-name{font-family:var(--display);font-size:22px;font-weight:600;margin-bottom:12px;line-height:1.3;}
 .proj-desc{font-size:13.5px;line-height:1.7;color:var(--fg-dim);font-weight:300;margin-bottom:20px;flex:1;}
 .proj-stack{font-size:10.5px;letter-spacing:0.08em;color:var(--accent);text-transform:uppercase;}
 
 /* ───────── skills ───────── */
-.skills-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:8px;}
+.skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:8px;perspective:900px;}
 @media(max-width:900px){.skills-grid{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:520px){.skills-grid{grid-template-columns:1fr;}}
-.skill-block{background:var(--bg);padding:30px 24px;transition:background .3s;}
+.skill-block{background:rgba(16,19,25,0.5);backdrop-filter:blur(8px);padding:30px 24px;transition:background .3s;transform-style:preserve-3d;}
 .skill-block:hover{background:var(--panel);}
 .skill-block-title{font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;font-family:var(--display);}
 .skill-list{list-style:none;}
@@ -222,7 +250,7 @@ section{position:relative;z-index:1;padding:150px 0;}
 .ach-wrap{margin-top:70px;}
 .ach-list{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--line);border:1px solid var(--line);margin-top:26px;}
 @media(max-width:768px){.ach-list{grid-template-columns:1fr;}}
-.ach-item{background:var(--bg);padding:24px 26px;display:flex;gap:16px;align-items:flex-start;transition:background .3s;}
+.ach-item{background:rgba(16,19,25,0.5);backdrop-filter:blur(8px);padding:24px 26px;display:flex;gap:16px;align-items:flex-start;transition:background .3s;}
 .ach-item:hover{background:var(--panel);}
 .ach-dot{width:5px;height:5px;border-radius:50%;background:var(--lime);margin-top:9px;flex-shrink:0;}
 .ach-text{font-size:14px;color:var(--fg-dim);font-weight:300;line-height:1.65;}
@@ -236,9 +264,10 @@ section{position:relative;z-index:1;padding:150px 0;}
 .big-link .u{position:absolute;left:0;bottom:6%;height:2px;width:100%;background:var(--fg);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease),background .3s;}
 .big-link:hover .u{transform:scaleX(1);background:linear-gradient(90deg,var(--accent),var(--accent2));}
 .contact-links{margin-top:56px;display:flex;gap:14px;flex-wrap:wrap;}
-.contact-link{display:flex;align-items:center;gap:12px;padding:15px 26px;border:1px solid var(--line);border-radius:100px;text-decoration:none;color:var(--fg-dim);font-size:13.5px;letter-spacing:0.02em;transition:all .3s;}
+.contact-link{display:flex;align-items:center;gap:12px;padding:15px 26px;border:1px solid var(--line);border-radius:100px;text-decoration:none;color:var(--fg-dim);font-size:13.5px;letter-spacing:0.02em;transition:border-color .3s,color .3s,background .3s;}
 .contact-link:hover{border-color:var(--accent);color:var(--fg);background:rgba(91,124,255,0.08);}
 .contact-link svg{width:15px;height:15px;}
+.contact-meta{margin-top:34px;font-size:12.5px;letter-spacing:0.03em;color:var(--muted);}
 
 footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:34px 0;}
 .foot-row{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;}
@@ -250,13 +279,16 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:34px
   .hero-sub{flex-direction:column;align-items:flex-start;gap:24px;}
   .contact-top{flex-direction:column;align-items:flex-start;}
 }
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important;}
+}
 </style>
 </head>
 <body>
 
 <div id="noise"></div>
 <div id="cursor-dot"></div>
-<div id="cursor-ring"></div>
+<div id="cursor-ring"><span class="label">View</span></div>
 
 <div id="preloader">
   <div class="pre-mark">Vishal Khatawate</div>
@@ -264,15 +296,16 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:34px
   <div class="pre-bar"><span></span></div>
 </div>
 
+<div id="bg-fallback"></div>
 <canvas id="bg-canvas"></canvas>
 
 <nav id="nav">
   <a href="#hero" class="nav-logo">V<span>.</span>K</a>
   <div class="nav-links" id="navLinks">
-    <a href="#about" data-sec="about">About</a>
-    <a href="#experience" data-sec="experience">Experience</a>
-    <a href="#work" data-sec="work">Work</a>
-    <a href="#skills" data-sec="skills">Skills</a>
+    <a href="#about" data-sec="about" data-scramble>About</a>
+    <a href="#experience" data-sec="experience" data-scramble>Experience</a>
+    <a href="#work" data-sec="work" data-scramble>Work</a>
+    <a href="#skills" data-sec="skills" data-scramble>Skills</a>
     <a href="#contact" data-sec="contact" class="nav-cta">Contact</a>
   </div>
   <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -282,13 +315,13 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:34px
 
   <!-- HERO -->
   <section id="hero" class="wrap">
-    <div class="hero-eyebrow"><span class="pulse"></span> AI/ML Engineer · Technical Program Manager · Bengaluru, India</div>
+    <div class="hero-eyebrow"><span class="pulse"></span> Forward Deployed AI/ML Engineer · Bengaluru, India · Open to Relocation</div>
     <h1 class="hero-name" id="heroName">
       <span class="line"><span>Vishal</span></span>
       <span class="line"><span><em>Khatawate</em></span></span>
     </h1>
     <div class="hero-sub reveal">
-      <p class="hero-role">Building <b>agentic LLM systems</b>, RAG pipelines, and production infrastructure — turning complex technical tradeoffs into <b>measurable business impact</b>.</p>
+      <p class="hero-role">3+ years delivering enterprise <b>AI agents</b>, LLM applications, and voice-automation systems in production — turning complex integrations into <b>measurable business impact</b>.</p>
       <div class="hero-scroll"><span>Scroll</span><div class="l"></div></div>
     </div>
   </section>
@@ -296,7 +329,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:34px
   <!-- MARQUEE -->
   <div class="marquee-strip">
     <div class="marquee-track" id="marqueeTrack">
-      <span><em>LangGraph</em><i class="dotsep"></i><em>RAG</em><i class="dotsep"></i><em>FastAPI</em><i class="dotsep"></i><em>Multi-Agent Systems</em><i class="dotsep"></i><em>AWS · GCP · Azure</em><i class="dotsep"></i><em>Redis</em><i class="dotsep"></i><em>PyTorch</em><i class="dotsep"></i></span>
+      <span><em>LangGraph</em><i class="dotsep"></i><em>RAG</em><i class="dotsep"></i><em>Voice AI Agents</em><i class="dotsep"></i><em>Multi-Agent Systems</em><i class="dotsep"></i><em>Node.js · TypeScript</em><i class="dotsep"></i><em>AWS · GCP · Azure</em><i class="dotsep"></i><em>Redis · Docker</em><i class="dotsep"></i><em>PyTorch</em><i class="dotsep"></i></span>
     </div>
   </div>
 
@@ -306,18 +339,18 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:34px
       <div>
         <div class="eyebrow-num reveal">01 — About</div>
         <h2 class="h2 reveal">Building AI systems<br>that <em>scale</em></h2>
-        <p class="about-body reveal reveal-d1">Technical Program Manager with hands-on experience orchestrating multi-workstream AI/ML programs embedded with enterprise clients. I turn complex technical tradeoffs into measurable business impact — from architecture to production, and from stakeholders to engineers.</p>
-        <div class="about-stack reveal reveal-d2">
-          <code>LangGraph</code><code>LangChain</code><code>FastAPI</code><code>Redis</code><code>AWS</code><code>Python</code>
+        <p class="about-body reveal">Forward Deployed AI/ML Engineer with 3+ years delivering enterprise AI solutions across AI agents, LLM applications, workflow orchestration, generative AI, NLP, computer vision, and RAG. I independently own implementations end to end — integrating with enterprise platforms, CRM systems, and cloud environments, then troubleshooting and optimizing for scale, latency, cost, and reliability.</p>
+        <div class="about-stack reveal">
+          <code>LangGraph</code><code>LangChain</code><code>Node.js</code><code>TypeScript</code><code>FastAPI</code><code>Redis</code><code>Docker</code><code>AWS</code>
         </div>
       </div>
-      <div class="stat-grid reveal reveal-d1">
-        <div class="stat-cell"><div class="stat-val" data-count="12" data-suffix="×">0×</div><div class="stat-lbl">Lead processing scale-up</div></div>
-        <div class="stat-cell"><div class="stat-val" data-count="60" data-suffix="K">0K</div><div class="stat-lbl">Leads per day at peak</div></div>
-        <div class="stat-cell"><div class="stat-val" data-count="30" data-suffix="%">0%</div><div class="stat-lbl">Reduction in production defects</div></div>
-        <div class="stat-cell"><div class="stat-val" data-count="35" data-suffix="%">0%</div><div class="stat-lbl">User engagement increase</div></div>
-        <div class="stat-cell"><div class="stat-val" data-count="15" data-suffix="">0</div><div class="stat-lbl">Google Cloud skill badges</div></div>
-        <div class="stat-cell"><div class="stat-val" data-count="8" data-suffix="+">0+</div><div class="stat-lbl">AI/ML projects shipped</div></div>
+      <div class="stat-grid reveal tilt-group">
+        <div class="stat-cell tilt"><div class="stat-val" data-count="12" data-suffix="×">0×</div><div class="stat-lbl">CRM throughput scale-up</div></div>
+        <div class="stat-cell tilt"><div class="stat-val" data-count="80" data-suffix="%+">0%+</div><div class="stat-lbl">Voice-agent production containment</div></div>
+        <div class="stat-cell tilt"><div class="stat-val" data-count="35" data-suffix="%">0%</div><div class="stat-lbl">Reduction in LLM inference cost</div></div>
+        <div class="stat-cell tilt"><div class="stat-val" data-count="40" data-suffix="%">0%</div><div class="stat-lbl">Lower implementation effort</div></div>
+        <div class="stat-cell tilt"><div class="stat-val" data-count="6" data-suffix="+">0+</div><div class="stat-lbl">Concurrent enterprise AI builds</div></div>
+        <div class="stat-cell tilt"><div class="stat-val" data-count="15" data-suffix="">0</div><div class="stat-lbl">Google Cloud skill badges</div></div>
       </div>
     </div>
   </section>
@@ -330,39 +363,26 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:34px
       <div class="exp-row reveal">
         <div>
           <div class="exp-period">Nov 2025 — Present</div>
-          <div class="exp-co">Nurix.ai via Bespoke<br>Bengaluru, India</div>
+          <div class="exp-co">Bespoke Technology<br>Forward Deployed at Nuplay.ai<br>(formerly Nurix.ai) · Bengaluru</div>
         </div>
         <div>
-          <div class="exp-role">Forward Deployed Engineer / Technical Program Manager</div>
-          <div class="exp-detail">Drove 12× lead-processing scale (5K → 60K leads/day) by diagnosing a LeadSquared CRM rate-limit bottleneck, architecting a queuing/retry orchestrator, and rebuilding end-to-end agent workflows. Owned full program lifecycle across critical enterprise CRM integrations, from scoping to production.</div>
+          <div class="exp-role">Software Development Engineer</div>
+          <div class="exp-detail">Led the rollout of the org's first tri-party AI voice-agent workflow, reaching 80%+ production containment. Cut LLM inference costs 35% via TTS caching, prompt and token-utilization optimization, lifting cache efficiency from 40% to 78%. Built reusable orchestration components (conditional routing, parallel processing) cutting implementation effort 40% across 6+ enterprise integrations. Diagnosed a production-critical LeadSquared API rate-limit bug and scaled CRM throughput 12× (5K → 60K leads/day). Independently drove execution across 6 concurrent enterprise AI implementations.</div>
           <div class="exp-tags">
-            <span class="exp-tag">LangGraph</span><span class="exp-tag">FastAPI</span><span class="exp-tag">Redis</span><span class="exp-tag">Prompt Eng.</span>
+            <span class="exp-tag">LangGraph</span><span class="exp-tag">Node.js / TypeScript</span><span class="exp-tag">Redis</span><span class="exp-tag">Docker</span><span class="exp-tag">Agent Evaluation</span>
           </div>
         </div>
       </div>
       <div class="exp-row reveal">
         <div>
-          <div class="exp-period">Jan 2024 — Dec 2024</div>
-          <div class="exp-co">Vocab.Ai / IIIT Dharwad</div>
+          <div class="exp-period">Aug 2023 — Oct 2025</div>
+          <div class="exp-co">Vocab.AI / IIIT Dharwad<br>Dharwad, India</div>
         </div>
         <div>
           <div class="exp-role">AI/ML Developer</div>
-          <div class="exp-detail">Improved computer-vision search ranking by 12% through iterative feature engineering and ML optimization. Built NLP models for intent classification; leveraged LLMs to evaluate quality in customer service transcripts. Reduced production defects by 30%.</div>
+          <div class="exp-detail">Engineered computer-vision search and ranking systems, improving performance by 12% through feature engineering and similarity scoring. Built NLP intent-classification and query-understanding models, and used LLMs to score customer-service transcripts across empathy, clarity, and response quality. Architected CV modules for blur/face detection and image-quality assessment with CNNs and OpenCV. Strengthened peer review practices, cutting production defects by 30%.</div>
           <div class="exp-tags">
             <span class="exp-tag">Computer Vision</span><span class="exp-tag">NLP</span><span class="exp-tag">OpenCV</span><span class="exp-tag">LLMs</span>
-          </div>
-        </div>
-      </div>
-      <div class="exp-row reveal">
-        <div>
-          <div class="exp-period">Feb 2023 — Apr 2023</div>
-          <div class="exp-co">TCS iON · Remote</div>
-        </div>
-        <div>
-          <div class="exp-role">Software Engineer Intern</div>
-          <div class="exp-detail">Built a CNN-LSTM handwritten text recognition pipeline achieving 15% accuracy improvement. Integrated OCR workflows (Tesseract + deep learning) to automate document digitization.</div>
-          <div class="exp-tags">
-            <span class="exp-tag">CNN-LSTM</span><span class="exp-tag">OCR</span><span class="exp-tag">TensorFlow</span>
           </div>
         </div>
       </div>
@@ -370,71 +390,80 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:34px
   </section>
 
   <!-- WORK -->
-  <section id="work" class="wrap">
-    <div class="eyebrow-num reveal">03 — Selected Work</div>
-    <h2 class="h2 reveal">Things I've <em>built</em></h2>
-    <div class="proj-grid" style="margin-top:56px" id="projGrid">
-
-      <a class="proj-item reveal" href="https://github.com/Valgha/Financial-Document-Reader" target="_blank" rel="noopener">
-        <div class="proj-cover"><div class="g" style="background:radial-gradient(circle,#5b7cff,#101319 70%)"></div></div>
-        <div class="proj-body">
-          <div class="proj-top"><span class="proj-num">01</span><span class="proj-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg></span></div>
-          <div class="proj-name">Financial Document Reader</div>
-          <div class="proj-desc">Extracts structured entities from PDFs, Word files, and scanned documents using OCR + RAG pipeline and BERT-based NER.</div>
-          <div class="proj-stack">Python · BERT · FAISS · RAG</div>
+  <section id="work">
+    <div class="wrap">
+      <div class="work-head">
+        <div>
+          <div class="eyebrow-num reveal">03 — Selected Work</div>
+          <h2 class="h2 reveal">Things I've <em>built</em></h2>
         </div>
-      </a>
+        <div class="work-hint">Scroll to explore <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      </div>
+    </div>
+    <div class="work-pin">
+      <div class="proj-track" id="projTrack">
 
-      <a class="proj-item reveal" href="https://github.com/Valgha/Image-Caption-Generation-for-specially-abled-people" target="_blank" rel="noopener">
-        <div class="proj-cover"><div class="g" style="background:radial-gradient(circle,#9b6bff,#101319 70%)"></div></div>
-        <div class="proj-body">
-          <div class="proj-top"><span class="proj-num">02</span><span class="proj-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg></span></div>
-          <div class="proj-name">Image Caption Generation</div>
-          <div class="proj-desc">AI-powered image captioning for differently abled users. Increased engagement 35% in six months post-launch.</div>
-          <div class="proj-stack">CNN · LSTM · TensorFlow</div>
-        </div>
-      </a>
+        <a class="proj-item" href="https://github.com/Valgha/Financial-Document-Reader" target="_blank" rel="noopener">
+          <div class="proj-cover"><div class="g" style="background:radial-gradient(circle,#5b7cff,#101319 70%)"></div></div>
+          <div class="proj-body">
+            <div class="proj-top"><span class="proj-num">01</span><span class="proj-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg></span></div>
+            <div class="proj-name">Financial Document Intelligence Platform</div>
+            <div class="proj-desc">Turns scanned PDFs and financial reports into structured entities — security identifiers, contract values, maturity dates — using OCR, BERT-based NER, and Sentence Transformers, with a FAISS + RAG retrieval layer for natural-language queries over the documents.</div>
+            <div class="proj-stack">Python · BERT · FAISS · RAG</div>
+          </div>
+        </a>
 
-      <a class="proj-item reveal" href="https://github.com/Valgha/Stock-market-prediction-" target="_blank" rel="noopener">
-        <div class="proj-cover"><div class="g" style="background:radial-gradient(circle,#d3ff5c,#101319 70%)"></div></div>
-        <div class="proj-body">
-          <div class="proj-top"><span class="proj-num">03</span><span class="proj-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg></span></div>
-          <div class="proj-name">Stock Market Prediction</div>
-          <div class="proj-desc">Predicts stock trends using ML and time-series forecasting based on historical movement patterns.</div>
-          <div class="proj-stack">Pandas · Scikit-learn · ML</div>
-        </div>
-      </a>
+        <a class="proj-item" href="https://github.com/Valgha/Image-Caption-Generation-for-specially-abled-people" target="_blank" rel="noopener">
+          <div class="proj-cover"><div class="g" style="background:radial-gradient(circle,#9b6bff,#101319 70%)"></div></div>
+          <div class="proj-body">
+            <div class="proj-top"><span class="proj-num">02</span><span class="proj-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg></span></div>
+            <div class="proj-name">AI Image Captioning Platform</div>
+            <div class="proj-desc">Automated vision-to-language system using a CNN-LSTM encoder-decoder to generate natural-language captions from visual content, built for differently abled users. Iterative model refinement lifted engagement 35% within six months.</div>
+            <div class="proj-stack">CNN · LSTM · TensorFlow</div>
+          </div>
+        </a>
 
-      <a class="proj-item reveal" href="https://github.com/Valgha/Farmer-Assistent-Management-in-Web" target="_blank" rel="noopener">
-        <div class="proj-cover"><div class="g" style="background:radial-gradient(circle,#5b7cff,#101319 70%)"></div></div>
-        <div class="proj-body">
-          <div class="proj-top"><span class="proj-num">04</span><span class="proj-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg></span></div>
-          <div class="proj-name">Farmer Assistant Web</div>
-          <div class="proj-desc">Connects farmers and suppliers to improve supply-chain transparency and direct profits for agricultural communities.</div>
-          <div class="proj-stack">PHP · MySQL · JavaScript</div>
-        </div>
-      </a>
+        <a class="proj-item" href="https://github.com/Valgha/Stock-market-prediction-" target="_blank" rel="noopener">
+          <div class="proj-cover"><div class="g" style="background:radial-gradient(circle,#38e0d8,#101319 70%)"></div></div>
+          <div class="proj-body">
+            <div class="proj-top"><span class="proj-num">03</span><span class="proj-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg></span></div>
+            <div class="proj-name">Stock Market Prediction</div>
+            <div class="proj-desc">Predicts stock trends using ML and time-series forecasting based on historical movement patterns.</div>
+            <div class="proj-stack">Pandas · Scikit-learn · ML</div>
+          </div>
+        </a>
 
-      <a class="proj-item reveal" href="https://github.com/Valgha/Car-Rental-System" target="_blank" rel="noopener">
-        <div class="proj-cover"><div class="g" style="background:radial-gradient(circle,#9b6bff,#101319 70%)"></div></div>
-        <div class="proj-body">
-          <div class="proj-top"><span class="proj-num">05</span><span class="proj-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg></span></div>
-          <div class="proj-name">Car Rental System</div>
-          <div class="proj-desc">Full-stack vehicle rental management platform with hourly billing, booking flows, and user management.</div>
-          <div class="proj-stack">PHP · MySQL · CSS</div>
-        </div>
-      </a>
+        <a class="proj-item" href="https://github.com/Valgha/Farmer-Assistent-Management-in-Web" target="_blank" rel="noopener">
+          <div class="proj-cover"><div class="g" style="background:radial-gradient(circle,#5b7cff,#101319 70%)"></div></div>
+          <div class="proj-body">
+            <div class="proj-top"><span class="proj-num">04</span><span class="proj-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg></span></div>
+            <div class="proj-name">Farmer Assistant Web</div>
+            <div class="proj-desc">Connects farmers and suppliers to improve supply-chain transparency and direct profits for agricultural communities.</div>
+            <div class="proj-stack">PHP · MySQL · JavaScript</div>
+          </div>
+        </a>
 
-      <a class="proj-item reveal" href="https://github.com/Valgha" target="_blank" rel="noopener" style="background:var(--panel)">
-        <div class="proj-cover"><div class="g" style="background:radial-gradient(circle,#d3ff5c,#101319 70%)"></div></div>
-        <div class="proj-body">
-          <div class="proj-top"><span class="proj-num">→</span><span class="proj-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg></span></div>
-          <div class="proj-name">View all on GitHub</div>
-          <div class="proj-desc">14 public repositories covering AI/ML, web development, and data engineering.</div>
-          <div class="proj-stack">github.com/Valgha</div>
-        </div>
-      </a>
+        <a class="proj-item" href="https://github.com/Valgha/Car-Rental-System" target="_blank" rel="noopener">
+          <div class="proj-cover"><div class="g" style="background:radial-gradient(circle,#9b6bff,#101319 70%)"></div></div>
+          <div class="proj-body">
+            <div class="proj-top"><span class="proj-num">05</span><span class="proj-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg></span></div>
+            <div class="proj-name">Car Rental System</div>
+            <div class="proj-desc">Full-stack vehicle rental management platform with hourly billing, booking flows, and user management.</div>
+            <div class="proj-stack">PHP · MySQL · CSS</div>
+          </div>
+        </a>
 
+        <a class="proj-item" href="https://github.com/Valgha" target="_blank" rel="noopener" style="background:rgba(16,19,25,0.75)">
+          <div class="proj-cover"><div class="g" style="background:radial-gradient(circle,#d3ff5c,#101319 70%)"></div></div>
+          <div class="proj-body">
+            <div class="proj-top"><span class="proj-num">→</span><span class="proj-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg></span></div>
+            <div class="proj-name">View all on GitHub</div>
+            <div class="proj-desc">14 public repositories covering AI/ML, web development, and data engineering.</div>
+            <div class="proj-stack">github.com/Valgha</div>
+          </div>
+        </a>
+
+      </div>
     </div>
   </section>
 
@@ -442,40 +471,52 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:34px
   <section id="skills" class="wrap">
     <div class="eyebrow-num reveal">04 — Skills</div>
     <h2 class="h2 reveal">Tools & <em>expertise</em></h2>
-    <div class="skills-grid reveal reveal-d1">
-      <div class="skill-block">
-        <div class="skill-block-title">AI & Agentic</div>
+    <div class="skills-grid reveal tilt-group">
+      <div class="skill-block tilt">
+        <div class="skill-block-title">Generative AI & LLMs</div>
         <ul class="skill-list">
-          <li>LangChain / LangGraph</li><li>RAG & LLM Agents</li><li>Multi-Agent Orchestration</li><li>Prompt Engineering (XML, Jinja)</li><li>Agent Evaluation & Testing</li>
+          <li>LangChain / LangGraph</li><li>RAG & Multi-Agent Systems</li><li>Prompt Engineering & Tool Calling</li><li>Agent Evaluation & LLM Optimization</li><li>Context Management</li>
         </ul>
       </div>
-      <div class="skill-block">
-        <div class="skill-block-title">ML & Data</div>
+      <div class="skill-block tilt">
+        <div class="skill-block-title">Machine Learning</div>
         <ul class="skill-list">
-          <li>PyTorch / TensorFlow</li><li>HuggingFace Transformers</li><li>NLP & Computer Vision</li><li>FAISS / Sentence-Transformers</li><li>OpenCV · Scikit-learn</li>
+          <li>PyTorch / TensorFlow</li><li>HuggingFace Transformers</li><li>Feature Engineering</li><li>Model Optimization & Evaluation</li><li>Scikit-learn</li>
         </ul>
       </div>
-      <div class="skill-block">
-        <div class="skill-block-title">Backend & Infra</div>
+      <div class="skill-block tilt">
+        <div class="skill-block-title">NLP & Retrieval</div>
         <ul class="skill-list">
-          <li>Python / FastAPI</li><li>Redis / Event-Driven Arch.</li><li>Docker / REST APIs</li><li>PostgreSQL / MySQL</li><li>Rate-Limiting & Queuing</li>
+          <li>Intent Classification</li><li>Named Entity Recognition</li><li>Semantic Search / FAISS</li><li>Sentence Transformers</li><li>OCR & Document Intelligence</li>
         </ul>
       </div>
-      <div class="skill-block">
-        <div class="skill-block-title">Cloud & Tools</div>
+      <div class="skill-block tilt">
+        <div class="skill-block-title">Computer Vision</div>
         <ul class="skill-list">
-          <li>AWS</li><li>Microsoft Azure</li><li>Google Cloud Platform</li><li>Git / VS Code / Jupyter</li><li>Power BI</li>
+          <li>CNNs / OpenCV</li><li>Face & Blur Detection</li><li>Image Quality Assessment</li><li>Image Similarity & Classification</li>
+        </ul>
+      </div>
+      <div class="skill-block tilt">
+        <div class="skill-block-title">AI Engineering</div>
+        <ul class="skill-list">
+          <li>Python / FastAPI</li><li>Node.js / TypeScript</li><li>Redis / Event-Driven Arch.</li><li>Docker / REST APIs</li><li>Production Monitoring</li>
+        </ul>
+      </div>
+      <div class="skill-block tilt">
+        <div class="skill-block-title">Data & Cloud</div>
+        <ul class="skill-list">
+          <li>AWS / Azure / GCP</li><li>PostgreSQL / ClickHouse</li><li>SQL & Data Pipelines</li><li>Metabase / Analytics</li><li>Git · CI/CD · Agile</li>
         </ul>
       </div>
     </div>
 
     <div class="ach-wrap">
       <div class="eyebrow-num reveal">Recognition & Education</div>
-      <div class="ach-list reveal reveal-d1">
+      <div class="ach-list reveal">
         <div class="ach-item"><div class="ach-dot"></div><div class="ach-text"><strong>Microsoft Azure AI Trophy</strong> — Azure AI Fundamentals: Document Intelligence & Knowledge Mining</div></div>
         <div class="ach-item"><div class="ach-dot"></div><div class="ach-text"><strong>Google Cloud Facilitator</strong> — 15 skill badges, Google Cloud Ready Program</div></div>
         <div class="ach-item"><div class="ach-dot"></div><div class="ach-text"><strong>National Hackathon Semi-Finalist</strong> — TCE · Elected Department President</div></div>
-        <div class="ach-item"><div class="ach-dot"></div><div class="ach-text"><strong>B.E. Computer Science</strong> — Tontadarya College of Engineering · CGPA 8.23/10</div></div>
+        <div class="ach-item"><div class="ach-dot"></div><div class="ach-text"><strong>B.E. Computer Science</strong> — Visvesvaraya Technological University · CGPA 8.23/10 · 2019–2023</div></div>
       </div>
     </div>
   </section>
@@ -487,14 +528,16 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:34px
         <div class="eyebrow-num">05 — Contact</div>
         <h2 class="h2">Let's work<br><em>together</em></h2>
       </div>
-      <p class="contact-sub">Open to TPM, AI/ML engineering, and forward-deployed roles. Based in Bengaluru, India. Available globally.</p>
+      <p class="contact-sub">Open to Forward Deployed Engineering, AI/ML, and applied-AI roles. Based in Bengaluru, India — open to relocation.</p>
     </div>
-    <a href="mailto:vhkhatawate@gmail.com" class="big-link reveal reveal-d1">Say hello<span class="u"></span></a>
-    <div class="contact-links reveal reveal-d2">
-      <a href="mailto:vhkhatawate@gmail.com" class="contact-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>vhkhatawate@gmail.com</a>
-      <a href="https://www.linkedin.com/in/vishal-khatawate-34b445197/" target="_blank" rel="noopener" class="contact-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn</a>
-      <a href="https://github.com/Valgha" target="_blank" rel="noopener" class="contact-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>GitHub · Valgha</a>
+    <a href="mailto:vhkhatawate@gmail.com" class="big-link reveal magnetic">Say hello<span class="u"></span></a>
+    <div class="contact-links reveal">
+      <a href="mailto:vhkhatawate@gmail.com" class="contact-link magnetic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>vhkhatawate@gmail.com</a>
+      <a href="tel:+919448799184" class="contact-link magnetic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+91 94487 99184</a>
+      <a href="https://www.linkedin.com/in/vishal-khatawate-34b445197/" target="_blank" rel="noopener" class="contact-link magnetic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn</a>
+      <a href="https://github.com/Valgha" target="_blank" rel="noopener" class="contact-link magnetic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>GitHub · Valgha</a>
     </div>
+    <div class="contact-meta reveal">Languages: English · Hindi · Kannada &nbsp;·&nbsp; Willing to relocate: Yes</div>
   </section>
 
 </main>
@@ -507,7 +550,13 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:34px
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
 <script>
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fineHover = matchMedia('(hover:hover) and (pointer:fine)').matches;
+
 /* ───────── preloader ───────── */
 const preEl = document.getElementById('preloader');
 const preCount = document.querySelector('.pre-count');
@@ -518,28 +567,93 @@ const preInt = setInterval(() => {
   if (pct >= 100) { pct = 100; clearInterval(preInt); }
   preCount.textContent = String(Math.floor(pct)).padStart(2,'0');
   preBar.style.width = pct + '%';
-  if (pct === 100) setTimeout(() => preEl.classList.add('done'), 350);
-}, 120);
+  if (pct === 100) {
+    setTimeout(() => {
+      preEl.classList.add('done');
+      document.getElementById('heroName').classList.add('in');
+    }, 300);
+  }
+}, 110);
 window.addEventListener('load', () => { pct = 100; });
 
 /* ───────── custom cursor ───────── */
 const cDot = document.getElementById('cursor-dot');
 const cRing = document.getElementById('cursor-ring');
-if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
+if (fineHover) {
   let rx=0, ry=0, dx=0, dy=0;
   window.addEventListener('mousemove', e => {
     dx = e.clientX; dy = e.clientY;
     cDot.style.left = dx+'px'; cDot.style.top = dy+'px';
   });
-  function ringLoop(){
+  (function ringLoop(){
     rx += (dx-rx)*0.18; ry += (dy-ry)*0.18;
     cRing.style.left = rx+'px'; cRing.style.top = ry+'px';
     requestAnimationFrame(ringLoop);
-  }
-  ringLoop();
-  document.querySelectorAll('a,button,.dot').forEach(el=>{
+  })();
+  document.querySelectorAll('a,button').forEach(el=>{
+    if (el.closest('.proj-item')) return;
     el.addEventListener('mouseenter',()=>cRing.classList.add('grow'));
     el.addEventListener('mouseleave',()=>cRing.classList.remove('grow'));
+  });
+  document.querySelectorAll('.proj-item').forEach(el=>{
+    el.addEventListener('mouseenter',()=>cRing.classList.add('view'));
+    el.addEventListener('mouseleave',()=>cRing.classList.remove('view'));
+  });
+}
+
+/* ───────── magnetic buttons ───────── */
+if (fineHover && !reducedMotion) {
+  document.querySelectorAll('.magnetic').forEach(el => {
+    const strength = 0.35;
+    el.addEventListener('mousemove', e => {
+      const r = el.getBoundingClientRect();
+      const mx = e.clientX - (r.left + r.width/2);
+      const my = e.clientY - (r.top + r.height/2);
+      gsap.to(el, { x: mx*strength, y: my*strength, duration: 0.4, ease: 'power3.out' });
+    });
+    el.addEventListener('mouseleave', () => {
+      gsap.to(el, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1,0.4)' });
+    });
+  });
+}
+
+/* ───────── 3D tilt ───────── */
+if (fineHover && !reducedMotion) {
+  document.querySelectorAll('.tilt').forEach(el => {
+    el.addEventListener('mousemove', e => {
+      const r = el.getBoundingClientRect();
+      const px = (e.clientX - r.left)/r.width - 0.5;
+      const py = (e.clientY - r.top)/r.height - 0.5;
+      el.style.transform = `perspective(700px) rotateX(${(-py*8).toFixed(2)}deg) rotateY(${(px*8).toFixed(2)}deg)`;
+    });
+    el.addEventListener('mouseleave', () => { el.style.transform = 'perspective(700px) rotateX(0) rotateY(0)'; });
+  });
+}
+
+/* ───────── text scramble on nav hover ───────── */
+const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&$@*';
+function scramble(el){
+  const original = el.textContent;
+  let frame = 0;
+  const totalFrames = 14;
+  clearInterval(el._scrambleTimer);
+  el._scrambleTimer = setInterval(() => {
+    frame++;
+    el.textContent = original.split('').map((ch,i) => {
+      if (ch === ' ') return ' ';
+      const reveal = frame - i*2;
+      if (reveal > totalFrames*0.5) return original[i];
+      return SCRAMBLE_CHARS[Math.floor(Math.random()*SCRAMBLE_CHARS.length)];
+    }).join('');
+    if (frame > totalFrames + original.length*2) {
+      el.textContent = original;
+      clearInterval(el._scrambleTimer);
+    }
+  }, 35);
+}
+if (fineHover && !reducedMotion) {
+  document.querySelectorAll('[data-scramble]').forEach(el => {
+    el.addEventListener('mouseenter', () => scramble(el));
   });
 }
 
@@ -560,34 +674,16 @@ navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
 
 /* ───────── nav scroll state + active link ───────── */
 const navEl = document.getElementById('nav');
-window.addEventListener('scroll', () => {
-  navEl.classList.toggle('scrolled', window.scrollY > 40);
-});
-
 const navAnchors = document.querySelectorAll('.nav-links a[data-sec]');
 const secEls = [...navAnchors].map(a => document.getElementById(a.dataset.sec));
 const navObs = new IntersectionObserver((entries) => {
   entries.forEach(en => {
-    if (en.isIntersecting) {
-      navAnchors.forEach(a => a.classList.toggle('active', a.dataset.sec === en.target.id));
-    }
+    if (en.isIntersecting) navAnchors.forEach(a => a.classList.toggle('active', a.dataset.sec === en.target.id));
   });
 }, { rootMargin: '-45% 0px -45% 0px' });
 secEls.forEach(s => s && navObs.observe(s));
 
-/* ───────── hero split-text reveal ───────── */
-requestAnimationFrame(() => {
-  setTimeout(() => document.getElementById('heroName').classList.add('in'), 300);
-});
-
-/* ───────── scroll reveal ───────── */
-const revealObs = new IntersectionObserver((entries) => {
-  entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); revealObs.unobserve(en.target); } });
-}, { threshold: 0.15 });
-document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
-
 /* ───────── stat counters ───────── */
-const counters = document.querySelectorAll('.stat-val');
 const countObs = new IntersectionObserver((entries) => {
   entries.forEach(en => {
     if (!en.isIntersecting) return;
@@ -595,71 +691,199 @@ const countObs = new IntersectionObserver((entries) => {
     const target = parseFloat(el.dataset.count);
     const suffix = el.dataset.suffix || '';
     const dur = 1300; const start = performance.now();
-    function step(now){
+    (function step(now){
       const p = Math.min((now-start)/dur, 1);
       const eased = 1 - Math.pow(1-p, 3);
       el.textContent = Math.floor(eased*target) + suffix;
-      if (p < 1) requestAnimationFrame(step);
-      else el.textContent = target + suffix;
-    }
-    requestAnimationFrame(step);
+      if (p < 1) requestAnimationFrame(step); else el.textContent = target + suffix;
+    })(start);
     countObs.unobserve(el);
   });
 }, { threshold: 0.4 });
-counters.forEach(c => countObs.observe(c));
+document.querySelectorAll('.stat-val').forEach(c => countObs.observe(c));
 
-/* ───────── three.js ambient particles ───────── */
-const canvas = document.getElementById('bg-canvas');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-renderer.setSize(innerWidth, innerHeight);
-
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(55, innerWidth/innerHeight, 0.1, 300);
-camera.position.z = 50;
-
-const N = 1400;
-const geo = new THREE.BufferGeometry();
-const pos = new Float32Array(N*3);
-const col = new Float32Array(N*3);
-const vel = new Float32Array(N*3);
-const palette = [[0.36,0.49,1.0],[0.61,0.42,1.0],[0.16,0.18,0.24],[0.83,1.0,0.36]];
-for (let i=0;i<N;i++){
-  pos[i*3]=(Math.random()-0.5)*180;
-  pos[i*3+1]=(Math.random()-0.5)*140;
-  pos[i*3+2]=(Math.random()-0.5)*80;
-  vel[i*3]=(Math.random()-0.5)*0.006;
-  vel[i*3+1]=(Math.random()-0.5)*0.004;
-  vel[i*3+2]=0;
-  const c = palette[Math.floor(Math.random()*(Math.random()<0.08?4:3))];
-  col[i*3]=c[0];col[i*3+1]=c[1];col[i*3+2]=c[2];
+/* ───────── Lenis smooth scroll + GSAP ScrollTrigger ───────── */
+gsap.registerPlugin(ScrollTrigger);
+let lenis = null;
+if (!reducedMotion) {
+  lenis = new Lenis({ duration: 1.05, easing: t => Math.min(1, 1.001 - Math.pow(2, -10*t)) });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => lenis.raf(time*1000));
+  gsap.ticker.lagSmoothing(0);
 }
-geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
-geo.setAttribute('color', new THREE.BufferAttribute(col,3));
-const mat = new THREE.PointsMaterial({ size:0.5, vertexColors:true, transparent:true, opacity:0.7 });
-scene.add(new THREE.Points(geo, mat));
 
-let mx=0,my=0;
-window.addEventListener('mousemove', e=>{ mx=(e.clientX/innerWidth-0.5)*2; my=(e.clientY/innerHeight-0.5)*2; });
-window.addEventListener('resize', ()=>{
-  camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth, innerHeight);
+/* scroll reveal */
+gsap.utils.toArray('.reveal').forEach(el => {
+  gsap.fromTo(el, { opacity:0, y:34 }, {
+    opacity:1, y:0, duration: reducedMotion ? 0.01 : 1, ease:'power3.out',
+    scrollTrigger:{ trigger: el, start:'top 88%' }
+  });
 });
-function animateBg(){
-  requestAnimationFrame(animateBg);
-  const p = geo.attributes.position.array;
+
+/* horizontal drag-style project gallery (desktop only) */
+const mm = gsap.matchMedia();
+mm.add('(min-width: 901px)', () => {
+  const projTrack = document.getElementById('projTrack');
+  const getAmount = () => projTrack.scrollWidth - document.documentElement.clientWidth;
+  const tween = gsap.to(projTrack, {
+    x: () => -getAmount(),
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '#work', start: 'top top', end: () => '+=' + getAmount(),
+      scrub: 1, pin: true, invalidateOnRefresh: true, anticipatePin: 1
+    }
+  });
+  return () => { tween.scrollTrigger && tween.scrollTrigger.kill(); tween.kill(); };
+});
+
+/* ───────── WebGL shader background ───────── */
+let webglOK = true;
+try {
+  const canvas = document.getElementById('bg-canvas');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias:false, alpha:false, powerPreference:'high-performance' });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.autoClear = false;
+
+  const bgScene = new THREE.Scene();
+  const bgCam = new THREE.OrthographicCamera(-1,1,1,-1,0,1);
+  const shaderMat = new THREE.ShaderMaterial({
+    uniforms: {
+      uTime: { value: 0 },
+      uMouse: { value: new THREE.Vector2(0.5,0.5) },
+      uScroll: { value: 0 },
+      uAspect: { value: innerWidth/innerHeight }
+    },
+    vertexShader: `
+      varying vec2 vUv;
+      void main(){ vUv = uv; gl_Position = vec4(position,1.0); }
+    `,
+    fragmentShader: `
+      precision highp float;
+      varying vec2 vUv;
+      uniform float uTime; uniform vec2 uMouse; uniform float uScroll; uniform float uAspect;
+
+      vec3 permute(vec3 x){ return mod(((x*34.0)+1.0)*x, 289.0); }
+      float snoise(vec2 v){
+        const vec4 C = vec4(0.211324865405187,0.366025403784439,-0.577350269189626,0.024390243902439);
+        vec2 i = floor(v + dot(v, C.yy));
+        vec2 x0 = v - i + dot(i, C.xx);
+        vec2 i1 = (x0.x > x0.y) ? vec2(1.0,0.0) : vec2(0.0,1.0);
+        vec4 x12 = x0.xyxy + C.xxzz; x12.xy -= i1;
+        i = mod(i, 289.0);
+        vec3 p = permute(permute(i.y + vec3(0.0,i1.y,1.0)) + i.x + vec3(0.0,i1.x,1.0));
+        vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+        m = m*m; m = m*m;
+        vec3 x = 2.0*fract(p*C.www) - 1.0;
+        vec3 h = abs(x) - 0.5;
+        vec3 ox = floor(x+0.5);
+        vec3 a0 = x - ox;
+        m *= 1.79284291400159 - 0.85373472095314*(a0*a0+h*h);
+        vec3 g;
+        g.x = a0.x*x0.x + h.x*x0.y;
+        g.yz = a0.yz*x12.xz + h.yz*x12.yw;
+        return 130.0*dot(m,g);
+      }
+      float fbm(vec2 p){
+        float f=0.0, amp=0.5;
+        for(int i=0;i<5;i++){ f += amp*snoise(p); p *= 2.02; amp *= 0.5; }
+        return f;
+      }
+      void main(){
+        vec2 uv = vUv;
+        vec2 p = uv - 0.5; p.x *= uAspect; p += 0.5;
+        p *= 2.6;
+        vec2 warp = vec2(fbm(p + uTime*0.045), fbm(p + uTime*0.045 + 11.3));
+        vec2 mv = (uMouse - 0.5); mv.x *= uAspect;
+        float n = fbm(p + warp*1.5 + mv*1.2);
+
+        float t = uScroll*0.85 + uTime*0.012;
+        float w1 = 0.5+0.5*sin(t*6.28318);
+        float w2 = 0.5+0.5*sin(t*6.28318+2.094);
+        float w3 = 0.5+0.5*sin(t*6.28318+4.188);
+        vec3 colA = vec3(0.357,0.486,1.0);
+        vec3 colB = vec3(0.608,0.420,1.0);
+        vec3 colC = vec3(0.20,0.85,0.80);
+        vec3 mixed = (colA*w1 + colB*w2 + colC*w3) / (w1+w2+w3);
+
+        vec3 base = vec3(0.024,0.028,0.036);
+        float glow = smoothstep(0.05, 0.9, n);
+        vec3 col = mix(base, mixed, glow*0.9);
+
+        float d = distance(uv, uMouse);
+        col += mixed * exp(-d*6.5) * 0.32;
+
+        float vig = smoothstep(1.15, 0.2, distance(uv, vec2(0.5)));
+        col *= mix(0.5, 1.0, vig);
+
+        gl_FragColor = vec4(col, 1.0);
+      }
+    `
+  });
+  bgScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2), shaderMat));
+
+  const particleScene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, innerWidth/innerHeight, 0.1, 300);
+  camera.position.z = 50;
+  const N = reducedMotion ? 0 : 900;
+  const geo = new THREE.BufferGeometry();
+  const pos = new Float32Array(N*3), col = new Float32Array(N*3), vel = new Float32Array(N*3);
+  const palette = [[0.36,0.49,1.0],[0.61,0.42,1.0],[0.20,0.85,0.80],[0.83,1.0,0.36]];
   for (let i=0;i<N;i++){
-    p[i*3]+=vel[i*3]; p[i*3+1]+=vel[i*3+1];
-    if (Math.abs(p[i*3])>90) vel[i*3]*=-1;
-    if (Math.abs(p[i*3+1])>70) vel[i*3+1]*=-1;
+    pos[i*3]=(Math.random()-0.5)*180; pos[i*3+1]=(Math.random()-0.5)*140; pos[i*3+2]=(Math.random()-0.5)*80;
+    vel[i*3]=(Math.random()-0.5)*0.006; vel[i*3+1]=(Math.random()-0.5)*0.004; vel[i*3+2]=0;
+    const c = palette[Math.floor(Math.random()*(Math.random()<0.1?4:3))];
+    col[i*3]=c[0]; col[i*3+1]=c[1]; col[i*3+2]=c[2];
   }
-  geo.attributes.position.needsUpdate = true;
-  camera.position.x += (mx*3-camera.position.x)*0.03;
-  camera.position.y += (-my*2-camera.position.y)*0.03;
-  camera.lookAt(0,0,0);
-  renderer.render(scene, camera);
+  geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  geo.setAttribute('color', new THREE.BufferAttribute(col,3));
+  const pmat = new THREE.PointsMaterial({ size:0.55, vertexColors:true, transparent:true, opacity:0.55 });
+  particleScene.add(new THREE.Points(geo, pmat));
+
+  let mx=0.5, my=0.5, tmx=0.5, tmy=0.5;
+  window.addEventListener('mousemove', e => { tmx = e.clientX/innerWidth; tmy = 1.0 - e.clientY/innerHeight; });
+  window.addEventListener('resize', () => {
+    camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight);
+    shaderMat.uniforms.uAspect.value = innerWidth/innerHeight;
+  });
+
+  let running = true;
+  document.addEventListener('visibilitychange', () => { running = !document.hidden; });
+
+  const clock = new THREE.Clock();
+  function tick(){
+    requestAnimationFrame(tick);
+    if (!running) return;
+    const dt = clock.getDelta();
+    mx += (tmx-mx)*0.06; my += (tmy-my)*0.06;
+    shaderMat.uniforms.uTime.value += dt;
+    shaderMat.uniforms.uMouse.value.set(mx, my);
+    const scrollY = window.scrollY || 0;
+    const maxScroll = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    shaderMat.uniforms.uScroll.value = scrollY / maxScroll;
+
+    const p = geo.attributes.position.array;
+    for (let i=0;i<N;i++){
+      p[i*3]+=vel[i*3]; p[i*3+1]+=vel[i*3+1];
+      if (Math.abs(p[i*3])>90) vel[i*3]*=-1;
+      if (Math.abs(p[i*3+1])>70) vel[i*3+1]*=-1;
+    }
+    if (N) geo.attributes.position.needsUpdate = true;
+    camera.position.x += ((mx-0.5)*6 - camera.position.x)*0.03;
+    camera.position.y += ((my-0.5)*4 - camera.position.y)*0.03;
+    camera.lookAt(0,0,0);
+
+    renderer.clear();
+    renderer.render(bgScene, bgCam);
+    renderer.clearDepth();
+    renderer.render(particleScene, camera);
+  }
+  tick();
+} catch(err) {
+  webglOK = false;
 }
-animateBg();
+if (!webglOK || reducedMotion) document.documentElement.classList.add('no-webgl');
 </script>
 </body>
 </html>
