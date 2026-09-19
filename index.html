@@ -135,6 +135,37 @@ a{color:inherit;}
 }
 @keyframes grain{0%{transform:translate(0,0);}50%{transform:translate(-1%,1%);}100%{transform:translate(1%,-1%);}}
 
+/* ───────── section mood glow: cross-fading color wash per section ───────── */
+#moodGlow{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
+.mood-layer{position:absolute;inset:-20%;opacity:0;transition:opacity 1.6s var(--ease);filter:blur(90px);}
+.mood-about{background:radial-gradient(circle at 26% 24%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 62%);}
+.mood-experience{background:radial-gradient(circle at 74% 30%, color-mix(in srgb, var(--accent2) 30%, transparent), transparent 62%);}
+.mood-work{background:radial-gradient(circle at 30% 70%, color-mix(in srgb, var(--accent3) 30%, transparent), transparent 62%);}
+.mood-skills{background:radial-gradient(circle at 72% 68%, color-mix(in srgb, var(--lime) 26%, transparent), transparent 62%);}
+.mood-contact{background:radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--accent2) 28%, transparent), transparent 62%);}
+body[data-mood="about"] .mood-about,
+body[data-mood="experience"] .mood-experience,
+body[data-mood="work"] .mood-work,
+body[data-mood="skills"] .mood-skills,
+body[data-mood="contact"] .mood-contact{opacity:1;}
+
+/* ───────── top scroll-progress bar ───────── */
+#scrollProgress{position:fixed;top:0;left:0;height:2px;width:0%;z-index:600;
+  background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3));
+  box-shadow:0 0 12px color-mix(in srgb, var(--accent) 60%, transparent);}
+
+/* ───────── right-side dot navigation ───────── */
+#dotNav{position:fixed;right:26px;top:50%;transform:translateY(-50%);z-index:450;
+  display:flex;flex-direction:column;gap:22px;}
+@media(max-width:1100px){#dotNav{display:none;}}
+.dotnav-rail{position:absolute;left:3px;top:7px;bottom:7px;width:1px;background:var(--line);}
+.dotnav-fill{position:absolute;left:0;top:0;width:100%;height:0%;background:linear-gradient(to bottom,var(--accent),var(--accent2));transition:height .1s linear;}
+.dotnav-item{position:relative;display:flex;align-items:center;gap:10px;text-decoration:none;padding:2px 0;}
+.dotnav-item .dot{width:7px;height:7px;border-radius:50%;border:1px solid var(--fg-dimmer);background:var(--bg);transition:all .3s var(--ease);flex-shrink:0;}
+.dotnav-item.active .dot{background:var(--accent);border-color:var(--accent);transform:scale(1.7);box-shadow:0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);}
+.dotnav-label{font-family:var(--display);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--fg-dim);opacity:0;transform:translateX(6px);transition:opacity .25s,transform .25s;white-space:nowrap;}
+.dotnav-item:hover .dotnav-label,.dotnav-item.active .dotnav-label{opacity:1;transform:translateX(0);}
+
 /* ───────── preloader ───────── */
 #preloader{
   position:fixed;inset:0;z-index:10000;background:var(--bg);
@@ -211,6 +242,7 @@ nav.scrolled{background:color-mix(in srgb, var(--bg) 78%, transparent);backdrop-
 
 /* ───────── hero ───────── */
 #hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:1;padding-top:120px;padding-bottom:60px;}
+.hero-eyebrow,.hero-name,.hero-sub,.hero-specs{position:relative;z-index:2;}
 .hero-eyebrow{display:flex;align-items:center;gap:12px;font-size:12px;letter-spacing:0.25em;text-transform:uppercase;color:var(--fg-dim);margin-bottom:34px;}
 .hero-eyebrow .pulse{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 0 color-mix(in srgb, var(--lime) 55%, transparent);animation:pulse 2s infinite;}
 @keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb, var(--lime) 55%, transparent);}70%{box-shadow:0 0 0 10px transparent;}100%{box-shadow:0 0 0 0 transparent;}}
@@ -229,6 +261,30 @@ nav.scrolled{background:color-mix(in srgb, var(--bg) 78%, transparent);backdrop-
 .hero-scroll .l{width:1px;height:52px;background:linear-gradient(to bottom,var(--accent),transparent);animation:scrollPulse 2s ease-in-out infinite;}
 @keyframes scrollPulse{0%,100%{opacity:.25;}50%{opacity:1;}}
 .hero-scroll span{font-size:10px;letter-spacing:0.2em;color:var(--muted);text-transform:uppercase;}
+
+/* ───────── hero quick-specs strip (Porsche-style readout) ───────── */
+.hero-specs{display:flex;align-items:center;gap:34px;margin-top:52px;flex-wrap:wrap;opacity:0;transform:translateY(20px);animation:fadeUp .9s var(--ease) 1.55s forwards;}
+.hspec-div{width:1px;height:38px;background:var(--line);flex-shrink:0;}
+@media(max-width:640px){.hspec-div{display:none;}}
+.hspec-val{font-family:var(--display);font-size:30px;font-weight:600;line-height:1;color:var(--fg);}
+.hspec-lbl{font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-top:8px;}
+@media(max-width:640px){.hero-specs{gap:26px 30px;}}
+
+/* ───────── hero rotating stack orb (turntable) ───────── */
+.hero-orb-wrap{position:absolute;right:0;top:52%;transform:translateY(-50%);width:320px;height:320px;perspective:1400px;pointer-events:none;z-index:1;opacity:.92;}
+@media(max-width:1300px){.hero-orb-wrap{display:none;}}
+.hero-orb{position:absolute;inset:0;transform-style:preserve-3d;animation:orbSpin 28s linear infinite;will-change:transform;}
+@keyframes orbSpin{to{transform:rotateY(360deg);}}
+.orb-face{position:absolute;top:50%;left:50%;width:148px;height:54px;margin:-27px 0 0 -74px;
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  font-family:var(--display);font-size:12.5px;font-weight:500;letter-spacing:.01em;color:var(--fg);
+  background:color-mix(in srgb, var(--panel-strong) 82%, transparent);
+  border:1px solid var(--line);border-radius:12px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  transform:rotateY(calc(var(--i) * 60deg)) translateZ(160px);
+  box-shadow:0 0 26px color-mix(in srgb, var(--accent) 14%, transparent);}
+.hero-orb-ring{position:absolute;inset:9%;border:1px solid color-mix(in srgb, var(--fg) 10%, transparent);border-radius:50%;animation:ringSpin 42s linear infinite reverse;}
+.hero-orb-ring::before{content:'';position:absolute;inset:14%;border:1px solid color-mix(in srgb, var(--fg) 6%, transparent);border-radius:50%;}
+@keyframes ringSpin{to{transform:rotate(360deg);}}
 
 /* ───────── marquee ───────── */
 .marquee-strip{position:relative;z-index:1;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:26px 0;background:var(--surface);backdrop-filter:blur(6px);transform:rotate(-1deg);margin:8px 0 -1px;overflow:hidden;}
@@ -280,7 +336,10 @@ section{position:relative;z-index:1;padding:150px 0;}
 .work-hint{font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px;}
 .work-hint svg{width:15px;height:15px;animation:swipe 1.6s ease-in-out infinite;}
 @keyframes swipe{0%,100%{transform:translateX(0);opacity:.5;}50%{transform:translateX(6px);opacity:1;}}
-@media(max-width:900px){.work-hint{display:none;}}
+@media(max-width:900px){.work-hint,.work-counter{display:none;}}
+.work-head-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px;}
+.work-counter{font-family:var(--display);font-size:13px;letter-spacing:.08em;color:var(--muted);}
+.work-counter span:first-child{color:var(--fg);font-size:16px;}
 .work-pin{margin-top:56px;}
 .proj-track{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden;padding-left:48px;padding-right:48px;}
 @media(max-width:960px){.proj-track{grid-template-columns:repeat(2,1fr);border-radius:0;}}
@@ -290,11 +349,13 @@ section{position:relative;z-index:1;padding:150px 0;}
   .proj-track{display:flex;width:max-content;padding-left:48px;padding-right:12vw;border-radius:0;}
   .proj-item{width:34vw;min-width:400px;max-width:520px;flex-shrink:0;}
 }
-.proj-item{background:var(--surface);backdrop-filter:blur(8px);padding:0;text-decoration:none;color:inherit;display:flex;flex-direction:column;position:relative;overflow:hidden;transition:background .35s;min-height:320px;}
+.proj-item{background:var(--surface);backdrop-filter:blur(8px);padding:0;text-decoration:none;color:inherit;display:flex;flex-direction:column;position:relative;overflow:hidden;transition:background .35s,opacity .4s var(--ease),transform .4s var(--ease);min-height:320px;}
 .proj-item:hover{background:var(--panel);}
-.proj-cover{height:140px;position:relative;overflow:hidden;}
+.proj-track.focus-mode .proj-item{opacity:.5;transform:scale(.97);}
+.proj-track.focus-mode .proj-item.is-focus{opacity:1;transform:scale(1);}
+.proj-cover{height:196px;position:relative;overflow:hidden;}
 .proj-cover .g{position:absolute;inset:-30%;filter:blur(40px);opacity:.6;transition:transform .6s var(--ease);}
-.proj-item:hover .proj-cover .g{transform:scale(1.15) rotate(8deg);}
+.proj-item:hover .proj-cover .g,.proj-item.is-focus .proj-cover .g{transform:scale(1.15) rotate(8deg);}
 .proj-body{padding:26px 26px 30px;display:flex;flex-direction:column;flex:1;}
 .proj-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;}
 .proj-num{font-family:var(--display);font-size:12px;letter-spacing:0.15em;color:var(--muted);}
@@ -368,10 +429,28 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:34px
   <div class="blob blob4"></div>
   <div class="shimmer-sweep"></div>
 </div>
+<div id="moodGlow">
+  <div class="mood-layer mood-about"></div>
+  <div class="mood-layer mood-experience"></div>
+  <div class="mood-layer mood-work"></div>
+  <div class="mood-layer mood-skills"></div>
+  <div class="mood-layer mood-contact"></div>
+</div>
 <div id="sparkles"></div>
 <div id="noise"></div>
+<div id="scrollProgress"></div>
 <div id="cursor-dot"></div>
 <div id="cursor-ring"><span class="label">View</span></div>
+
+<div id="dotNav" aria-hidden="true">
+  <div class="dotnav-rail"><span class="dotnav-fill" id="dotFill"></span></div>
+  <a href="#hero" class="dotnav-item active" data-sec="hero"><span class="dot"></span><span class="dotnav-label">Home</span></a>
+  <a href="#about" class="dotnav-item" data-sec="about"><span class="dot"></span><span class="dotnav-label">About</span></a>
+  <a href="#experience" class="dotnav-item" data-sec="experience"><span class="dot"></span><span class="dotnav-label">Experience</span></a>
+  <a href="#work" class="dotnav-item" data-sec="work"><span class="dot"></span><span class="dotnav-label">Work</span></a>
+  <a href="#skills" class="dotnav-item" data-sec="skills"><span class="dot"></span><span class="dotnav-label">Skills</span></a>
+  <a href="#contact" class="dotnav-item" data-sec="contact"><span class="dot"></span><span class="dotnav-label">Contact</span></a>
+</div>
 
 <div id="preloader">
   <div class="pre-mark">Vishal Khatawate</div>
@@ -401,6 +480,17 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:34px
 
   <!-- HERO -->
   <section id="hero" class="wrap">
+    <div class="hero-orb-wrap" id="heroOrbWrap">
+      <div class="hero-orb" id="heroOrb">
+        <div class="orb-face" style="--i:0">LangGraph</div>
+        <div class="orb-face" style="--i:1">RAG</div>
+        <div class="orb-face" style="--i:2">Multi-Agent</div>
+        <div class="orb-face" style="--i:3">Node.js</div>
+        <div class="orb-face" style="--i:4">AWS</div>
+        <div class="orb-face" style="--i:5">PyTorch</div>
+      </div>
+      <div class="hero-orb-ring"></div>
+    </div>
     <div class="hero-eyebrow"><span class="pulse"></span> Forward Deployed AI/ML Engineer · Bengaluru, India · Open to Relocation</div>
     <h1 class="hero-name" id="heroName">
       <span class="line"><span>Vishal</span></span>
@@ -409,6 +499,15 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:34px
     <div class="hero-sub">
       <p class="hero-role">3+ years delivering enterprise <b>AI agents</b>, LLM applications, and voice-automation systems in production — turning complex integrations into <b>measurable business impact</b>.</p>
       <div class="hero-scroll"><span>Scroll</span><div class="l"></div></div>
+    </div>
+    <div class="hero-specs">
+      <div class="hspec"><div class="hspec-val" data-count="12" data-suffix="×">0×</div><div class="hspec-lbl">CRM Throughput</div></div>
+      <div class="hspec-div"></div>
+      <div class="hspec"><div class="hspec-val" data-count="80" data-suffix="%+">0%+</div><div class="hspec-lbl">Voice Containment</div></div>
+      <div class="hspec-div"></div>
+      <div class="hspec"><div class="hspec-val" data-count="35" data-suffix="%">0%</div><div class="hspec-lbl">Lower Inference Cost</div></div>
+      <div class="hspec-div"></div>
+      <div class="hspec"><div class="hspec-val" data-count="3" data-suffix="+">0+</div><div class="hspec-lbl">Years in Production AI</div></div>
     </div>
   </section>
 
@@ -486,7 +585,10 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:34px
           <div class="eyebrow-num reveal">03 — Selected Work</div>
           <h2 class="h2 reveal">Things I've <em>built</em></h2>
         </div>
-        <div class="work-hint">Scroll to explore <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        <div class="work-head-right">
+          <div class="work-hint">Scroll to explore <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="work-counter"><span id="workCur">01</span> / <span id="workTotal">06</span></div>
+        </div>
       </div>
     </div>
     <div class="work-pin">
@@ -730,6 +832,24 @@ if (fineHover && !reducedMotion) {
   });
 }
 
+/* ───────── hero orb: mouse-driven turntable tilt ───────── */
+const heroOrbWrap = document.getElementById('heroOrbWrap');
+const heroSection = document.getElementById('hero');
+if (heroOrbWrap && heroSection && fineHover && !reducedMotion) {
+  let ox = 0, oy = 0, otx = 0, oty = 0;
+  heroSection.addEventListener('mousemove', e => {
+    const r = heroSection.getBoundingClientRect();
+    otx = (e.clientX - r.left) / r.width - 0.5;
+    oty = (e.clientY - r.top) / r.height - 0.5;
+  });
+  (function orbLoop(){
+    ox += (otx - ox) * 0.06;
+    oy += (oty - oy) * 0.06;
+    heroOrbWrap.style.transform = `translateY(-50%) rotateX(${(-oy*14).toFixed(2)}deg) rotateY(${(ox*18).toFixed(2)}deg)`;
+    requestAnimationFrame(orbLoop);
+  })();
+}
+
 /* ───────── text scramble on nav hover ───────── */
 const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&$@*';
 function scramble(el){
@@ -823,7 +943,30 @@ const countObs = new IntersectionObserver((entries) => {
     countObs.unobserve(el);
   });
 }, { threshold: 0.4 });
-document.querySelectorAll('.stat-val').forEach(c => countObs.observe(c));
+document.querySelectorAll('.stat-val, .hspec-val').forEach(c => countObs.observe(c));
+
+/* ───────── dot-nav: active section + rail progress + body mood ───────── */
+const dotItems = document.querySelectorAll('.dotnav-item[data-sec]');
+const dotFill = document.getElementById('dotFill');
+const moodSecEls = [...dotItems].map(a => document.getElementById(a.dataset.sec)).filter(Boolean);
+if (dotItems.length) {
+  const dotObs = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if (en.isIntersecting) {
+        dotItems.forEach(a => a.classList.toggle('active', a.dataset.sec === en.target.id));
+        document.body.dataset.mood = en.target.id;
+      }
+    });
+  }, { rootMargin: '-42% 0px -42% 0px' });
+  moodSecEls.forEach(s => dotObs.observe(s));
+}
+window.addEventListener('scroll', () => {
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+  if (dotFill) dotFill.style.height = pct + '%';
+  const bar = document.getElementById('scrollProgress');
+  if (bar) bar.style.width = pct + '%';
+}, { passive: true });
 
 /* ───────── safety net: content must NEVER get stuck invisible ─────────
    Every .reveal element starts at opacity:0 and is meant to be faded in
@@ -867,16 +1010,44 @@ if (!gsapReady) {
     const mm = gsap.matchMedia();
     mm.add('(min-width: 901px)', () => {
       const projTrack = document.getElementById('projTrack');
+      const projItems = projTrack.querySelectorAll('.proj-item');
+      const workCur = document.getElementById('workCur');
+      const workTotal = document.getElementById('workTotal');
+      if (workTotal) workTotal.textContent = String(projItems.length).padStart(2, '0');
+      projTrack.classList.add('focus-mode');
       const getAmount = () => Math.max(0, projTrack.scrollWidth - document.documentElement.clientWidth);
       const tween = gsap.to(projTrack, {
         x: () => -getAmount(),
         ease: 'none',
         scrollTrigger: {
           trigger: '#work', start: 'top top', end: () => '+=' + getAmount(),
-          scrub: 1, pin: true, invalidateOnRefresh: true, anticipatePin: 1
+          scrub: 1, pin: true, invalidateOnRefresh: true, anticipatePin: 1,
+          onUpdate: () => {
+            const center = window.innerWidth / 2;
+            let idx = 0, minDist = Infinity;
+            projItems.forEach((it, i) => {
+              const r = it.getBoundingClientRect();
+              const c = r.left + r.width / 2;
+              const dist = Math.abs(c - center);
+              it.classList.toggle('is-focus', dist < r.width / 2);
+              if (dist < minDist) { minDist = dist; idx = i; }
+            });
+            if (workCur) workCur.textContent = String(idx + 1).padStart(2, '0');
+          }
         }
       });
-      return () => { tween.scrollTrigger && tween.scrollTrigger.kill(); tween.kill(); };
+      return () => {
+        tween.scrollTrigger && tween.scrollTrigger.kill();
+        tween.kill();
+        projTrack.classList.remove('focus-mode');
+        projItems.forEach(it => it.classList.remove('is-focus'));
+      };
+    });
+
+    /* hero orb: fade out on scroll (opacity only — transform is owned by the mouse-tilt loop) */
+    gsap.to('#heroOrbWrap', {
+      opacity: 0, ease: 'none',
+      scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true }
     });
 
     /* web fonts swap late and shift layout — stale trigger positions
